@@ -20,6 +20,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
         keymap.set("n", "<space>f", function()
             require("conform").format({ async = true, lsp_fallback = true })
         end, bufopts)
+
+        keymap.set("n", "<leader>do", function() vim.diagnostic.open_float() end, bufopts)
     end
 })
 

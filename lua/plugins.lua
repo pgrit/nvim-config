@@ -101,7 +101,7 @@ require("lazy").setup({
             "neovim/nvim-lspconfig",
         },
         opts = {
-            ensure_installed = { "pylsp" },
+            ensure_installed = { "pylsp", "csharp_ls", "ts_ls" },
         },
     },
     { "nvim-telescope/telescope.nvim" },
@@ -141,4 +141,5 @@ require("lazy").setup({
             -- vim.g.minimap_git_colors = 1
         end
     },
+    { "tpope/vim-commentary" },
 })
