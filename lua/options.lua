@@ -1,5 +1,5 @@
 -- Hint: use `:h <option>` to figure out the meaning if needed
-vim.opt.clipboard = 'unnamedplus'   -- use system clipboard 
+vim.opt.clipboard = 'unnamedplus'   -- use system clipboard
 vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
 vim.opt.mouse = 'a'                 -- allow the mouse to be used in Nvim
 
@@ -9,7 +9,7 @@ vim.opt.softtabstop = 4             -- number of spaces in tab when editing
 vim.opt.shiftwidth = 4              -- insert 4 spaces on a tab
 vim.opt.expandtab = true            -- tabs are spaces, mainly because of python
 
-local autocmd = vim.api.nvim_create_autocmd 
+local autocmd = vim.api.nvim_create_autocmd
 autocmd("Filetype", {
     pattern = { "typst", "html", "just" },
     command = "set shiftwidth=2 tabstop=2 softtabstop=2",
@@ -29,3 +29,9 @@ vim.opt.incsearch = true            -- search as characters are entered
 vim.opt.hlsearch = false            -- do not highlight matches
 vim.opt.ignorecase = true           -- ignore case in searches by default
 vim.opt.smartcase = true            -- but make it case sensitive if an uppercase is entered
+
+-- White space trimming
+autocmd("BufWritePre", {
+    pattern = { "*" },
+    command = ":%s/\\s\\+$//e",
+})
