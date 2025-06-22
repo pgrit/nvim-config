@@ -11,7 +11,7 @@ vim.opt.expandtab = true            -- tabs are spaces, mainly because of python
 
 local autocmd = vim.api.nvim_create_autocmd
 autocmd("Filetype", {
-    pattern = { "typst", "html", "just" },
+    pattern = { "typst", "html", "just", "markdown" },
     command = "set shiftwidth=2 tabstop=2 softtabstop=2",
 })
 
