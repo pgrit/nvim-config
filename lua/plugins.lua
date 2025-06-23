@@ -101,24 +101,15 @@ require("lazy").setup({
             "neovim/nvim-lspconfig",
         },
         opts = {
-            ensure_installed = { "pylsp", "csharp_ls", "ts_ls" },
+            ensure_installed = { "pylsp", "csharp_ls", "ts_ls", "tinymist" },
         },
     },
     { "nvim-telescope/telescope.nvim" },
-
     {
-      "williamboman/mason.nvim",
-      opts = {
-        ensure_installed = {
-          "tinymist",
-        },
-      },
-    },
-    {
-      'chomosuke/typst-preview.nvim',
-      lazy = false, -- or ft = 'typst'
-      version = '1.*',
-    opts = {}, -- lazy.nvim will implicitly calls `setup {}`
+        'chomosuke/typst-preview.nvim',
+        lazy = false, -- or ft = 'typst'
+        version = '1.*',
+        opts = {}, -- lazy.nvim will implicitly calls `setup {}`
     },
     {
         "mfussenegger/nvim-dap"
@@ -132,7 +123,7 @@ require("lazy").setup({
     },
     { "tpope/vim-fugitive" },
     { "lewis6991/gitsigns.nvim" },
-    { 
+    {
         "wfxr/minimap.vim",
         init = function()
             vim.g.minimap_width = 5
@@ -152,7 +143,7 @@ require("lazy").setup({
         ft = { "markdown" },
         build = function()
             vim.cmd [[Lazy load markdown-preview.nvim]]
-            vim.fn["mkdp#util#install"]() 
+            vim.fn["mkdp#util#install"]()
         end,
     },
 })
