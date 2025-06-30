@@ -17,6 +17,8 @@ dap.configurations.cs = {
   },
 }
 
+require("dap-python").setup("python3")
+
 dapui.setup({
   icons = { expanded = "▾", collapsed = "▸", current_frame = "▸" },
   mappings = {
@@ -108,3 +110,6 @@ end
 dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
 end
+
+vim.fn.sign_define('DapBreakpoint',{ text ='🟥', texthl ='', linehl ='', numhl =''})
+vim.fn.sign_define('DapStopped',{ text ='▶️', texthl ='', linehl ='', numhl =''})

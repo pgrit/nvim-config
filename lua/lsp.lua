@@ -11,7 +11,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     callback = function (args)
         local keymap = vim.keymap
         local lsp = vim.lsp
-	    local bufopts = { noremap = true, silent = true }
+        local bufopts = { noremap = true, silent = true }
 
         keymap.set("n", "gr", lsp.buf.references, bufopts)
         keymap.set("n", "gd", lsp.buf.definition, bufopts)
@@ -23,41 +23,35 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 })
 
-require("lspconfig")["tinymist"].setup { -- Alternatively, can be used `vim.lsp.config["tinymist"]`
-
-    -- ...
-
+require("lspconfig")["tinymist"].setup {
     on_attach = function(client, bufnr)
-
         vim.keymap.set("n", "<leader>tp", function()
-
             client:exec_cmd({
-
                 title = "pin",
-
                 command = "tinymist.pinMain",
-
                 arguments = { vim.api.nvim_buf_get_name(0) },
-
             }, { bufnr = bufnr })
-
         end, { desc = "[T]inymist [P]in", noremap = true })
-
-
         vim.keymap.set("n", "<leader>tu", function()
-
             client:exec_cmd({
-
                 title = "unpin",
-
                 command = "tinymist.pinMain",
-
                 arguments = { vim.v.null },
-
             }, { bufnr = bufnr })
-
         end, { desc = "[T]inymist [U]npin", noremap = true })
-
     end,
-
 }
+
+vim.lsp.config('pylsp', {
+  settings = {
+    pylsp = {
+      plugins = {
+        pycodestyle = {
+            enabled = false,
+          ignore = {'W391','E302','E275'},
+          maxLineLength = 100
+        }
+      }
+    }
+  }
+})

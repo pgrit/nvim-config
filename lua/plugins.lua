@@ -121,6 +121,7 @@ require("lazy").setup({
             ensure_installed = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
         },
     },
+    { "mfussenegger/nvim-dap-python" },
     { "tpope/vim-fugitive" },
     { "lewis6991/gitsigns.nvim" },
     {
