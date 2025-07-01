@@ -6,6 +6,7 @@ dap.adapters.coreclr = {
   args = {'--interpreter=vscode'}
 }
 
+-- If no launch.json is configured, this can be used instead
 dap.configurations.cs = {
   {
     type = "coreclr",
