@@ -147,4 +147,9 @@ require("lazy").setup({
             vim.fn["mkdp#util#install"]()
         end,
     },
+    {
+        'windwp/nvim-autopairs',
+        event = "InsertEnter",
+        config = true
+    }
 })

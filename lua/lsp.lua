@@ -15,6 +15,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         keymap.set("n", "gr", lsp.buf.references, bufopts)
         keymap.set("n", "gd", lsp.buf.definition, bufopts)
+
+        vim.keymap.set("n", "]g", vim.diagnostic.goto_next)
+        vim.keymap.set("n", "[g", vim.diagnostic.goto_prev)
+
         keymap.set("n", "<F2>", lsp.buf.rename, bufopts)
         keymap.set("n", "K", lsp.buf.hover, bufopts)
         keymap.set("n", "<space>f", function()
