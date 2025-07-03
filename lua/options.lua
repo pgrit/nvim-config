@@ -35,3 +35,10 @@ autocmd("BufWritePre", {
     pattern = { "*" },
     command = ":%s/\\s\\+$//e",
 })
+
+-- Filetype mappings
+vim.filetype.add({
+  pattern = {
+    ['.*.axaml'] = 'xml',
+  },
+})
