@@ -29,7 +29,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 local lspconfig = require("lspconfig")
 
-lspconfig.tinymist.setup {
+vim.lsp.config('tinymist', {
     on_attach = function(client, bufnr)
         vim.keymap.set("n", "<leader>tp", function()
             client:exec_cmd({
@@ -46,9 +46,9 @@ lspconfig.tinymist.setup {
             }, { bufnr = bufnr })
         end, { desc = "[T]inymist [U]npin", noremap = true })
     end,
-}
+})
 
-lspconfig.csharp_ls.setup({
+vim.lsp.config('csharp_ls', {
     root_dir = function(startpath)
         return lspconfig.util.root_pattern("*.sln")(startpath)
             or lspconfig.util.root_pattern("*.csproj")(startpath)
