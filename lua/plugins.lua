@@ -141,4 +141,8 @@ require("lazy").setup({
             notifier = { },
         }
     },
+    {
+        'stevearc/conform.nvim',
+        opts = {},
+    }
 })
