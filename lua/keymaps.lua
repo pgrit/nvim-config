@@ -4,6 +4,10 @@ local opts = {
     silent = true,       -- do not show message
 }
 
+-----------------------------
+-- General editor commands --
+-----------------------------
+
 function map(mode, shortcut, command)
     vim.api.nvim_set_keymap(mode, shortcut, command, { noremap = true, silent = true })
 end
@@ -11,6 +15,8 @@ end
 map('n', '<Home>', '^')
 map('v', '<Home>', '^')
 map('i', '<Home>', '<Esc>^i')
+
+vim.keymap.set('n', '<Leader>c', ':let @/ = ""<CR>', opts)
 
 -----------------
 -- Normal mode --
