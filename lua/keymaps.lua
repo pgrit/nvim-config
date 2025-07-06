@@ -48,3 +48,11 @@ vim.keymap.set('n', '<Leader>dc', (function () require'dapui'.close() end), opts
 -------------------------
 
 vim.keymap.set("n", "<F1>", function() vim.diagnostic.open_float() end, opts)
+
+
+--------------------------
+-- QoL plugins triggers --
+--------------------------
+
+vim.keymap.set('n', '<Leader>e', (function () Snacks.explorer() end), opts)
+vim.keymap.set('n', '<Leader>g', (function () Snacks.lazygit() end), opts)

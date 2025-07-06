@@ -21,7 +21,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         keymap.set("n", "<F2>", lsp.buf.rename, bufopts)
         keymap.set("n", "K", lsp.buf.hover, bufopts)
-        keymap.set("n", "<space>f", function()
+        keymap.set("n", "<C-f>", function()
             require("conform").format({ async = true, lsp_fallback = true })
         end, bufopts)
     end
@@ -46,17 +46,6 @@ vim.lsp.config('tinymist', {
             }, { bufnr = bufnr })
         end, { desc = "[T]inymist [U]npin", noremap = true })
     end,
-})
-
-vim.lsp.config('csharp_ls', {
-    root_dir = function(startpath)
-        return lspconfig.util.root_pattern("*.sln")(startpath)
-            or lspconfig.util.root_pattern("*.csproj")(startpath)
-            or lspconfig.util.root_pattern("*.fsproj")(startpath)
-            or lspconfig.util.root_pattern(".git")(startpath)
-    end,
-    on_attach = on_attach,
-    capabilities = capabilities,
 })
 
 vim.lsp.config('pylsp', {

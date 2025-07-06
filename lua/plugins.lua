@@ -121,5 +121,24 @@ require("lazy").setup({
         'windwp/nvim-autopairs',
         event = "InsertEnter",
         config = true
-    }
+    },
+    {
+        "folke/snacks.nvim",
+        ---@type snacks.Config
+        opts = {
+            scroll = { },
+            dashboard = {
+                sections = {
+                    { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 2 },
+                    { section = "keys", gap = 1 },
+                    { section = "startup" },
+                },
+            },
+            explorer = { },
+            indent = { },
+            input = { },
+            lazygit = { },
+            notifier = { },
+        }
+    },
 })
