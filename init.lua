@@ -1,7 +1,9 @@
 require('options')
 require('plugins')
+
 require('colorscheme')
 require('lsp')
+require('autopairssetup')
 require('telescopecfg')
 require('debugconfig')
 require('keymaps')
