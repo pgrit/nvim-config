@@ -21,9 +21,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         keymap.set("n", "<F2>", lsp.buf.rename, bufopts)
         keymap.set("n", "K", lsp.buf.hover, bufopts)
-        keymap.set("n", "<C-f>", function()
-            require("conform").format({ async = true, lsp_fallback = true })
-        end, bufopts)
     end
 })
 
@@ -46,6 +43,9 @@ vim.lsp.config('tinymist', {
             }, { bufnr = bufnr })
         end, { desc = "[T]inymist [U]npin", noremap = true })
     end,
+    settings = {
+        formatterMode = "typstyle",
+    },
 })
 
 vim.lsp.config('pylsp', {

@@ -65,7 +65,7 @@ vim.keymap.set("n", "<F1>", function()
 	vim.diagnostic.open_float()
 end, opts)
 
-vim.keymap.set("", "<Leader>f", function()
+vim.keymap.set({'n', 'v'}, "<C-f>", function()
 	require("conform").format({ async = true, lsp_fallback = true })
 end)
 
