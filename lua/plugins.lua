@@ -71,7 +71,7 @@ require("lazy").setup({
 			"neovim/nvim-lspconfig",
 		},
 		opts = {
-			ensure_installed = { "pylsp", "ts_ls", "omnisharp", "tinymist" },
+			ensure_installed = { "pylsp", "ts_ls", "csharp_ls", "tinymist" },
 		},
 	},
 	{ "nvim-telescope/telescope.nvim" },
