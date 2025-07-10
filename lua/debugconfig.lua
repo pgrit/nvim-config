@@ -8,14 +8,14 @@ dap.adapters.coreclr = {
 
 -- If no launch.json is configured, this can be used instead
 dap.configurations.cs = {
-  {
-    type = "coreclr",
-    name = "launch - netcoredbg",
-    request = "launch",
-    program = function()
-        return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/net9.0/', 'file')
-    end,
-  },
+  -- {
+  --   type = "coreclr",
+  --   name = "launch - netcoredbg",
+  --   request = "launch",
+  --   program = function()
+  --       return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/net9.0/', 'file')
+  --   end,
+  -- },
 }
 
 require("dap-python").setup("python3")
