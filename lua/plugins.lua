@@ -71,7 +71,7 @@ require("lazy").setup({
             "neovim/nvim-lspconfig",
         },
         opts = {
-            ensure_installed = { "pylsp", "csharp_ls", "ts_ls", "tinymist" },
+            ensure_installed = { "pylsp", "ts_ls", "omnisharp", "tinymist" },
         },
     },
     { "nvim-telescope/telescope.nvim" },
@@ -144,5 +144,6 @@ require("lazy").setup({
     {
         'stevearc/conform.nvim',
         opts = {},
-    }
+    },
+    { 'jlcrochet/vim-razor' },
 })

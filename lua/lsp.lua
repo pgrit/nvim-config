@@ -24,8 +24,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 })
 
-local lspconfig = require("lspconfig")
-
 vim.lsp.config('tinymist', {
     on_attach = function(client, bufnr)
         vim.keymap.set("n", "<leader>tp", function()
