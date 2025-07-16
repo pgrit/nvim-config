@@ -76,3 +76,4 @@ end)
 
 vim.keymap.set('n', '<Leader>e', (function () Snacks.explorer() end), opts)
 vim.keymap.set('n', '<Leader>g', (function () Snacks.lazygit() end), opts)
+vim.keymap.set('n', '<Leader>gg', (function () Snacks.lazygit() end), opts)
