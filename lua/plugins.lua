@@ -156,6 +156,11 @@ require("lazy").setup({
 				"<cmd>Trouble diagnostics toggle<cr>",
 				desc = "Diagnostics (Trouble)",
 			},
+            {
+				"<leader>xx",
+				"<cmd>Trouble diagnostics toggle<cr>",
+				desc = "Diagnostics (Trouble)",
+			},
 			{
 				"<leader>xs",
 				"<cmd>Trouble symbols toggle focus=true<cr>",
