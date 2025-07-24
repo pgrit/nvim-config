@@ -198,4 +198,10 @@ require("lazy").setup({
 			{ "<leader>gy", "<cmd>GitLink<cr>", mode = { "n", "v" }, desc = "Yank git link" },
 		},
 	},
+    {
+        "aznhe21/actions-preview.nvim",
+        config = function()
+            vim.keymap.set({ "v", "n" }, "gf", require("actions-preview").code_actions)
+        end,
+    },
 })

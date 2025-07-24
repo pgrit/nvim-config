@@ -59,3 +59,11 @@ vim.lsp.config('pylsp', {
     }
   }
 })
+
+vim.lsp.config('ltex', {
+    settings = {
+        ltex = {
+            enabled = { "latex", "markdown" }
+        }
+    }
+})
