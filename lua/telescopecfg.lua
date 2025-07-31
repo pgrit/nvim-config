@@ -15,10 +15,10 @@ telescope.setup({
 		-- `hidden = true` is not supported in text grep commands.
 		vimgrep_arguments = vimgrep_arguments,
 
-        layout_strategy = 'vertical',
-        layout_config = {
-            vertical = { width = 0.9 }
-        },
+		layout_strategy = "vertical",
+		layout_config = {
+			vertical = { width = 0.9 },
+		},
 	},
 	pickers = {
 		find_files = {
@@ -28,10 +28,18 @@ telescope.setup({
 	},
 })
 
-local builtin = require('telescope.builtin')
+-- Enable line wrapping in telescope previews
+vim.api.nvim_create_autocmd("User", {
+	pattern = "TelescopePreviewerLoaded",
+	callback = function(args)
+		vim.wo.wrap = true
+	end,
+})
 
-vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
-vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
-vim.keymap.set('n', '<leader>fr', builtin.oldfiles, { desc = 'Telescope find recent files' })
+local builtin = require("telescope.builtin")
+
+vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
+vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
+vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
+vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
+vim.keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = "Telescope find recent files" })
