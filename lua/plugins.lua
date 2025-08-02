@@ -94,7 +94,7 @@ require("lazy").setup({
 	{ "mfussenegger/nvim-dap-python" },
 	{ "tpope/vim-fugitive" },
 	{ "lewis6991/gitsigns.nvim" },
-    { "tpope/vim-commentary" },
+	{ "tpope/vim-commentary" },
 	{
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -125,6 +125,7 @@ require("lazy").setup({
 					{ section = "startup" },
 				},
 			},
+			picker = {},
 			explorer = {},
 			indent = {},
 			input = {},
@@ -147,7 +148,7 @@ require("lazy").setup({
 				"<cmd>Trouble diagnostics toggle<cr>",
 				desc = "Diagnostics (Trouble)",
 			},
-            {
+			{
 				"<leader>xx",
 				"<cmd>Trouble diagnostics toggle<cr>",
 				desc = "Diagnostics (Trouble)",
@@ -198,10 +199,10 @@ require("lazy").setup({
 			{ "<leader>gy", "<cmd>GitLink<cr>", mode = { "n", "v" }, desc = "Yank git link" },
 		},
 	},
-    {
-        "aznhe21/actions-preview.nvim",
-        config = function()
-            vim.keymap.set({ "v", "n" }, "gf", require("actions-preview").code_actions)
-        end,
-    },
+	{
+		"aznhe21/actions-preview.nvim",
+		config = function()
+			vim.keymap.set({ "v", "n" }, "gf", require("actions-preview").code_actions)
+		end,
+	},
 })
