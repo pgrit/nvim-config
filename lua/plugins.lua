@@ -11,57 +11,104 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local isolated_completion_kind = nil
+function isolate_completion(example, tbl)
+	local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+	if isolated_completion_kind ~= nil and isolated_completion_kind[example] ~= nil then
+		isolated_completion_kind = nil -- Reset completion filter
+	else
+		isolated_completion_kind = tbl
+	end
+	require("blink.cmp").cancel()
+	vim.schedule(require("blink.cmp").show)
+end
+
 require("lazy").setup({
-	"tanvirtin/monokai.nvim",
+	{ "tanvirtin/monokai.nvim" },
+	{ "xzbdmw/colorful-menu.nvim" },
 	{
 		"saghen/blink.cmp",
-		dependencies = { "rafamadriz/friendly-snippets" },
-
-		version = "*",
-
 		opts = {
 			keymap = {
 				preset = "super-tab",
-				-- Select completions
 				["<Up>"] = { "select_prev", "fallback" },
 				["<Down>"] = { "select_next", "fallback" },
-				-- Scroll documentation
-				["<C-b>"] = { "scroll_documentation_up", "fallback" },
-				["<C-f>"] = { "scroll_documentation_down", "fallback" },
-				-- Show/hide signature
 				["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
-			},
 
-			appearance = {
-				nerd_font_variant = "mono",
+                -- Show only variable-like symbols
+				["<C-v>"] = {
+					function()
+						local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+						isolate_completion(CompletionItemKind.Property, {
+							[CompletionItemKind.Field] = true,
+							[CompletionItemKind.Variable] = true,
+							[CompletionItemKind.Property] = true,
+							[CompletionItemKind.EnumMember] = true,
+							[CompletionItemKind.Constant] = true,
+							[CompletionItemKind.Event] = true,
+						})
+					end,
+				},
+                -- Show only function-like symbols
+				["<C-f>"] = {
+					function()
+						local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+						isolate_completion(CompletionItemKind.Method, {
+							[CompletionItemKind.Method] = true,
+							[CompletionItemKind.Function] = true,
+							[CompletionItemKind.Constructor] = true,
+							[CompletionItemKind.Operator] = true,
+						})
+					end,
+				},
+                -- Show only type-like symbols
+				["<C-t>"] = {
+					function()
+						local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+						isolate_completion(CompletionItemKind.Class, {
+							[CompletionItemKind.Class] = true,
+							[CompletionItemKind.Interface] = true,
+							[CompletionItemKind.Module] = true,
+							[CompletionItemKind.Enum] = true,
+							[CompletionItemKind.Struct] = true,
+							[CompletionItemKind.TypeParameter] = true,
+						})
+					end,
+				},
 			},
-
-			sources = {
-				default = { "lsp", "path", "snippets", "buffer" },
-			},
-
 			fuzzy = { implementation = "prefer_rust_with_warning" },
 			completion = {
-				-- The keyword should only match against the text before
-				keyword = { range = "prefix" },
+				keyword = { range = "full" },
 				menu = {
-					-- Use treesitter to highlight the label text for the given list of sources
 					draw = {
-						treesitter = { "lsp" },
+						columns = { { "kind_icon", gap = 1, "kind" }, { "label", gap = 1 } },
+						components = {
+							label = {
+								text = function(ctx)
+									return require("colorful-menu").blink_components_text(ctx)
+								end,
+								highlight = function(ctx)
+									return require("colorful-menu").blink_components_highlight(ctx)
+								end,
+							},
+						},
 					},
 				},
-				-- Show completions after typing a trigger character, defined by the source
 				trigger = { show_on_trigger_character = true },
 				documentation = {
-					-- Show documentation automatically
 					auto_show = true,
 				},
 			},
-
-			-- Signature help when typing
 			signature = { enabled = true },
+			sources = {
+				transform_items = function(_, items)
+					items = vim.tbl_filter(function(item)
+						return isolated_completion_kind == nil or isolated_completion_kind[item.kind] ~= nil
+					end, items)
+					return items
+				end,
+			},
 		},
-		opts_extend = { "sources.default" },
 	},
 	{ "mason-org/mason.nvim", opts = {} },
 	{
