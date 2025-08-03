@@ -20,7 +20,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set("n", "[g", vim.diagnostic.goto_prev)
 
 		keymap.set("n", "<F2>", lsp.buf.rename, bufopts)
-		keymap.set("n", "K", lsp.buf.hover, bufopts)
+		keymap.set("n", "K", function()
+			lsp.buf.hover({ border = "rounded" })
+		end, bufopts)
 	end,
 })
 
@@ -71,6 +73,6 @@ vim.lsp.config("ltex", {
 local hl = require("actions-preview.highlight")
 require("actions-preview").setup({
 	highlight_command = {
-        hl.delta("delta --no-gitconfig"),
-    },
+		hl.delta("delta --no-gitconfig"),
+	},
 })

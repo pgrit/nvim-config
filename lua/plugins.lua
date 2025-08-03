@@ -118,15 +118,26 @@ require("lazy").setup({
 			"neovim/nvim-lspconfig",
 		},
 		opts = {
-			ensure_installed = { "pylsp", "ts_ls", "csharp_ls", "tinymist" },
+			ensure_installed = {
+				"pylsp",
+				"ts_ls",
+				"html",
+				"csharp_ls",
+				"fsautocomplete",
+				"tinymist",
+				"clangd",
+				"arduino_language_server",
+				"ltex",
+				"texlab",
+			},
 		},
 	},
 	{ "nvim-telescope/telescope.nvim" },
 	{
 		"chomosuke/typst-preview.nvim",
-		lazy = false, -- or ft = 'typst'
+		lazy = false,
 		version = "1.*",
-		opts = {}, -- lazy.nvim will implicitly calls `setup {}`
+		opts = {},
 	},
 	{
 		"mfussenegger/nvim-dap",
@@ -139,8 +150,26 @@ require("lazy").setup({
 		},
 	},
 	{ "mfussenegger/nvim-dap-python" },
-	{ "tpope/vim-fugitive" },
-	{ "lewis6991/gitsigns.nvim" },
+	{
+		"lewis6991/gitsigns.nvim",
+		keys = {
+			{
+				"<leader>gb",
+				"<cmd>Gitsigns toggle_current_line_blame<cr>",
+				desc = "Toggle git inline blame",
+			},
+			{
+				"<leader>gc",
+				"<cmd>Gitsigns setloclist<cr>",
+				desc = "Show list of git change locations",
+			},
+			{
+				"<leader>gd",
+				"<cmd>Gitsigns diffthis<cr>",
+				desc = "Show git diff",
+			},
+		},
+	},
 	{ "tpope/vim-commentary" },
 	{
 		"nvim-lualine/lualine.nvim",
@@ -230,11 +259,32 @@ require("lazy").setup({
 		},
 	},
 	{
+		"folke/todo-comments.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = {
+			highlight = {
+				pattern = [[.*<(KEYWORDS)\s*]],
+			},
+			search = {
+				pattern = [[\b(KEYWORDS)\b]],
+			},
+		},
+		keys = {
+			{
+				"<leader>xt",
+				"<cmd>TodoTrouble<cr>",
+				desc = "Show TODO comments (Trouble)",
+			},
+		},
+	},
+	{
 		"rachartier/tiny-inline-diagnostic.nvim",
 		event = "VeryLazy", -- Or `LspAttach`
 		priority = 1000, -- needs to be loaded in first
 		config = function()
-			require("tiny-inline-diagnostic").setup()
+			require("tiny-inline-diagnostic").setup({
+				preset = "minimal",
+			})
 			vim.diagnostic.config({ virtual_text = false }) -- Only if needed in your configuration, if you already have native LSP diagnostics
 		end,
 	},
@@ -243,7 +293,7 @@ require("lazy").setup({
 		cmd = "GitLink",
 		opts = {},
 		keys = {
-			{ "<leader>gy", "<cmd>GitLink<cr>", mode = { "n", "v" }, desc = "Yank git link" },
+			{ "<leader>gl", "<cmd>GitLink<cr>", mode = { "n", "v" }, desc = "Yank git link" },
 		},
 	},
 	{
