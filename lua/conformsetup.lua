@@ -1,10 +1,4 @@
 require("conform").setup({
-    formatters = {
-        csharpier = {
-            command = "csharpier",
-            args = { "format", "$FILENAME", "--write-stdout" },
-        }
-    },
 	formatters_by_ft = {
 		lua = { "stylua" },
 		python = { "isort", "black" },
