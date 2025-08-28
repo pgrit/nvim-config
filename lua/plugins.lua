@@ -28,6 +28,7 @@ require("lazy").setup({
 	{ "xzbdmw/colorful-menu.nvim" },
 	{
 		"saghen/blink.cmp",
+		version = "1.*",
 		opts = {
 			keymap = {
 				preset = "super-tab",
@@ -35,7 +36,7 @@ require("lazy").setup({
 				["<Down>"] = { "select_next", "fallback" },
 				["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
 
-                -- Show only variable-like symbols
+				-- Show only variable-like symbols
 				["<C-v>"] = {
 					function()
 						local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
@@ -49,7 +50,7 @@ require("lazy").setup({
 						})
 					end,
 				},
-                -- Show only function-like symbols
+				-- Show only function-like symbols
 				["<C-f>"] = {
 					function()
 						local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
@@ -61,7 +62,7 @@ require("lazy").setup({
 						})
 					end,
 				},
-                -- Show only type-like symbols
+				-- Show only type-like symbols
 				["<C-t>"] = {
 					function()
 						local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
@@ -72,6 +73,7 @@ require("lazy").setup({
 							[CompletionItemKind.Enum] = true,
 							[CompletionItemKind.Struct] = true,
 							[CompletionItemKind.TypeParameter] = true,
+							[CompletionItemKind.Keyword] = true,
 						})
 					end,
 				},
