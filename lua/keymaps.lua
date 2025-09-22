@@ -18,6 +18,12 @@ map('i', '<Home>', '<Esc>^i')
 
 vim.keymap.set('n', '<Leader>c', ':let @/ = ""<CR>', opts)
 
+-- Switch to next and previous buffer
+vim.keymap.set('n', '<C-n>', ':bnext<CR>', opts)
+vim.keymap.set('i', '<C-n>', '<ESC>:bnext<CR>', opts)
+vim.keymap.set('n', '<C-p>', ':bprevious<CR>', opts)
+vim.keymap.set('i', '<C-p>', '<ESC>:bprevious<CR>', opts)
+
 -----------------
 -- Normal mode --
 -----------------
