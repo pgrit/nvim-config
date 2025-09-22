@@ -305,4 +305,7 @@ require("lazy").setup({
 			vim.keymap.set({ "v", "n" }, "gf", require("actions-preview").code_actions)
 		end,
 	},
+    {
+        "ionide/Ionide-vim"
+    },
 })
