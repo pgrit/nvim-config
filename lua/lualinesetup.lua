@@ -23,6 +23,7 @@ require("lualine").setup({
 				"dapui_console",
 				"trouble",
 				"snacks_picker_list",
+				"snacks_dashboard",
 			},
 			winbar = {
 				"dapui_scopes",
@@ -33,6 +34,7 @@ require("lualine").setup({
 				"dapui_console",
 				"trouble",
 				"snacks_picker_list",
+				"snacks_dashboard",
 			},
 		},
 		ignore_focus = {},

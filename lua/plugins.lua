@@ -24,6 +24,7 @@ function isolate_completion(example, tbl)
 end
 
 require("lazy").setup({
+	{ "nvim-treesitter/nvim-treesitter", lazy = false, branch = "main", build = ":TSUpdate" },
 	{ "tanvirtin/monokai.nvim" },
 	{ "xzbdmw/colorful-menu.nvim" },
 	{
@@ -172,6 +173,7 @@ require("lazy").setup({
 				desc = "Show git diff",
 			},
 		},
+        lazy = false,
 	},
 	{ "tpope/vim-commentary" },
 	{
@@ -263,6 +265,7 @@ require("lazy").setup({
 	},
 	{
 		"folke/todo-comments.nvim",
+        lazy = false,
 		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = {
 			highlight = {
@@ -305,7 +308,7 @@ require("lazy").setup({
 			vim.keymap.set({ "v", "n" }, "gf", require("actions-preview").code_actions)
 		end,
 	},
-    {
-        "ionide/Ionide-vim"
-    },
+	{
+		"ionide/Ionide-vim",
+	},
 })
