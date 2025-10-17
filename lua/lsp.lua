@@ -45,6 +45,8 @@ vim.lsp.config("tinymist", {
 	end,
 	settings = {
 		formatterMode = "typstyle",
+        -- specify local relative paths for fonts (must be consistent with preview setting & CLI args!)
+        fontPaths = { "./fonts", "./common/fonts" }
 	},
 })
 

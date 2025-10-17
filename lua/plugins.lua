@@ -141,7 +141,10 @@ require("lazy").setup({
 		"chomosuke/typst-preview.nvim",
 		lazy = false,
 		version = "1.*",
-		opts = {},
+		opts = {
+            -- specify local relative paths for fonts (must be consistent with LSP setting & CLI args!)
+            extra_args = { "--font-path ./common/fonts", "--font-path ./fonts" }
+        },
 	},
 	{
 		"mfussenegger/nvim-dap",
