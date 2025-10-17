@@ -142,9 +142,9 @@ require("lazy").setup({
 		lazy = false,
 		version = "1.*",
 		opts = {
-            -- specify local relative paths for fonts (must be consistent with LSP setting & CLI args!)
-            extra_args = { "--font-path ./common/fonts", "--font-path ./fonts" }
-        },
+			-- specify local relative paths for fonts (must be consistent with LSP setting & CLI args!)
+			extra_args = { "--font-path", "./common/fonts", "--font-path", "./fonts" },
+		},
 	},
 	{
 		"mfussenegger/nvim-dap",
@@ -176,7 +176,7 @@ require("lazy").setup({
 				desc = "Show git diff",
 			},
 		},
-        lazy = false,
+		lazy = false,
 	},
 	{ "tpope/vim-commentary" },
 	{
@@ -268,7 +268,7 @@ require("lazy").setup({
 	},
 	{
 		"folke/todo-comments.nvim",
-        lazy = false,
+		lazy = false,
 		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = {
 			highlight = {
