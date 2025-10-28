@@ -80,7 +80,17 @@ require("lualine").setup({
 	winbar = {
 		lualine_a = {},
 		lualine_b = {},
-		lualine_c = { "filename" },
+		lualine_c = {
+			{
+				"filename",
+				color = function (section)
+                    return {
+                        bg = vim.bo.modified and "#FFD166" or "#323742",
+                        fg = vim.bo.modified and "#000000" or nil,
+                    }
+                end,
+			},
+		},
 		lualine_x = {},
 		lualine_y = {},
 		lualine_z = {},
