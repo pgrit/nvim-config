@@ -142,6 +142,9 @@ require("lazy").setup({
 		lazy = false,
 		version = "1.*",
 		opts = {
+			dependencies_bin = {
+				["tinymist"] = "tinymist", -- Use tinymist installed via Mason, assuming it is in path (avoids version mismatch between LSP and preview)
+			},
 			-- specify local relative paths for fonts (must be consistent with LSP setting & CLI args!)
 			extra_args = { "--font-path", "./common/fonts", "--font-path", "./fonts" },
 		},
