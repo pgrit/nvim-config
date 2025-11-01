@@ -16,8 +16,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		keymap.set("n", "gr", lsp.buf.references, bufopts)
 		keymap.set("n", "gd", lsp.buf.definition, bufopts)
 
-		vim.keymap.set("n", "]g", vim.diagnostic.goto_next)
-		vim.keymap.set("n", "[g", vim.diagnostic.goto_prev)
+		vim.keymap.set("n", "]g", function()
+			vim.diagnostic.jump({ count = 1, float = true })
+		end)
+		vim.keymap.set("n", "[g", function()
+			vim.diagnostic.jump({ count = -1, float = true })
+		end)
 
 		keymap.set("n", "<F2>", lsp.buf.rename, bufopts)
 		keymap.set("n", "K", function()
@@ -45,8 +49,8 @@ vim.lsp.config("tinymist", {
 	end,
 	settings = {
 		formatterMode = "typstyle",
-        -- specify local relative paths for fonts (must be consistent with preview setting & CLI args!)
-        fontPaths = { "./fonts", "./common/fonts" }
+		-- specify local relative paths for fonts (must be consistent with preview setting & CLI args!)
+		fontPaths = { "./fonts", "./common/fonts" },
 	},
 })
 
@@ -76,5 +80,29 @@ local hl = require("actions-preview.highlight")
 require("actions-preview").setup({
 	highlight_command = {
 		hl.delta("delta --no-gitconfig"),
+	},
+})
+
+vim.lsp.config("lua_ls", {
+	settings = {
+		Lua = {
+			runtime = {
+				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+				version = "LuaJIT",
+				path = vim.split(package.path, ";"),
+			},
+			diagnostics = {
+				-- Globals for neovim and plugins
+				globals = { "vim", "Snacks" },
+			},
+			workspace = {
+				-- Make the server aware of Neovim runtime files and plugins
+				library = { vim.env.VIMRUNTIME },
+				checkThirdParty = false,
+			},
+			telemetry = {
+				enable = false,
+			},
+		},
 	},
 })

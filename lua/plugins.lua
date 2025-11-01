@@ -12,8 +12,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local isolated_completion_kind = nil
-function isolate_completion(example, tbl)
-	local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+local function isolate_completion(example, tbl)
+	-- local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
 	if isolated_completion_kind ~= nil and isolated_completion_kind[example] ~= nil then
 		isolated_completion_kind = nil -- Reset completion filter
 	else
@@ -125,7 +125,6 @@ require("lazy").setup({
 				"pylsp",
 				"ts_ls",
 				"html",
-				-- "csharp_ls",
 				"omnisharp",
 				"fsautocomplete",
 				"tinymist",
@@ -206,18 +205,71 @@ require("lazy").setup({
 		opts = {
 			scroll = {},
 			dashboard = {
+				preset = {
+					-- Used by the `keys` section to show keymaps.
+					-- When using a function, the `items` argument are the default keymaps.
+					---@type snacks.dashboard.Item[]
+					keys = {
+						{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
+					},
+				},
 				sections = {
-					{ icon = " ", title = "Projects", section = "projects", indent = 2, padding = 2 },
+					{
+						icon = " ",
+						title = "Projects",
+						section = "projects",
+						limit = 20,
+						indent = 2,
+						padding = 2,
+					},
 					{ section = "keys", gap = 1 },
 					{ section = "startup" },
 				},
 			},
-			picker = {},
+			picker = {
+				sources = {
+					explorer = {
+						layout = {
+							layout = {
+								width = 25,
+							},
+						},
+					},
+				},
+			},
 			explorer = {},
 			indent = {},
 			input = {},
 			lazygit = {},
-			notifier = {},
+			statuscolumn = {},
+			words = {},
+			notifier = {
+				timeout = 6000,
+				width = { min = 40, max = 0.8 },
+				margin = { top = 1 },
+			},
+			---@type table<string, snacks.win.Config>
+			styles = {
+				sidebar = {
+					width = 4,
+				},
+				notification = {
+					wo = { wrap = true },
+				},
+				notification_history = {
+					border = true,
+					zindex = 100,
+					width = 0.9,
+					height = 0.9,
+					minimal = false,
+					title = " Notification History ",
+					title_pos = "center",
+					ft = "markdown",
+					bo = { filetype = "snacks_notif_history", modifiable = false },
+					wo = { winhighlight = "Normal:SnacksNotifierHistory" },
+					keys = { q = "close" },
+				},
+			},
 		},
 	},
 	{
