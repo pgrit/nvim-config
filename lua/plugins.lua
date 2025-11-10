@@ -203,7 +203,7 @@ require("lazy").setup({
 		"folke/snacks.nvim",
 		---@type snacks.Config
 		opts = {
-			scroll = {},
+			-- scroll = {},
 			dashboard = {
 				preset = {
 					-- Used by the `keys` section to show keymaps.
@@ -224,6 +224,44 @@ require("lazy").setup({
 					},
 					{ section = "keys", gap = 1 },
 					{ section = "startup" },
+				},
+				formats = {
+					-- Workaround: autokeys on the very right is not easy to
+					-- visually map to the dictionary / you want to open.
+					-- So we replace the icon with the key.
+					icon = function(item)
+						if item.file and item.icon == "file" or item.icon == "directory" then
+							return { item.key, width = 1, hl = "key" }
+						end
+						return { item.icon, width = 2, hl = "icon" }
+					end,
+
+					-- Highlight the last directory / file in a path, write the
+					-- full path (with long intermediate dirs shortened) after it
+					file = function(item, ctx)
+						local fname = vim.fn.fnamemodify(item.file, ":~")
+						local dirname = fname:match("^.*/(.+)$")
+
+						-- Shorten the full path to fit the width
+						fname = ctx.width and #fname > ctx.width and vim.fn.pathshorten(fname) or fname
+						if #fname > ctx.width then
+							local dir = vim.fn.fnamemodify(fname, ":h")
+							local file = vim.fn.fnamemodify(fname, ":t")
+							if dir and file then
+								file = file:sub(-(ctx.width - #dir - 2))
+								fname = dir .. "/…" .. file
+							end
+						end
+						local dir, file = fname:match("^(.*)/(.+)$")
+						return dir
+								and {
+									{ dirname, hl = "file" }, -- Last file / directory, highlighted
+									{ " " },
+									{ dir .. "/", hl = "dir" }, -- Path (shortened)
+									{ file, hl = "dir" }, -- hl = "dir" to not highlight twice
+								}
+							or { { fname, hl = "file" } }
+					end,
 				},
 			},
 			picker = {
