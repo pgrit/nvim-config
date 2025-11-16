@@ -84,7 +84,7 @@ require("lazy").setup({
 				keyword = { range = "full" },
 				menu = {
 					draw = {
-						columns = { { "kind_icon", gap = 1, "kind" }, { "label", gap = 1 } },
+						columns = { { "kind_icon", gap = 1, "kind" }, { "label", gap = 1 }, { "source_id", gap = 1 } },
 						components = {
 							label = {
 								text = function(ctx)

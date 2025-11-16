@@ -27,26 +27,29 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		keymap.set("n", "K", function()
 			lsp.buf.hover({ border = "rounded" })
 		end, bufopts)
+
+		-- tinymist file pinning
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		if client and client.name == "tinymist" then
+			vim.keymap.set("n", "<leader>tp", function()
+				client:exec_cmd({
+					title = "pin",
+					command = "tinymist.pinMain",
+					arguments = { vim.api.nvim_buf_get_name(0) },
+				}, { bufnr = args.buf })
+			end, { desc = "[T]inymist [P]in", noremap = true })
+			vim.keymap.set("n", "<leader>tu", function()
+				client:exec_cmd({
+					title = "unpin",
+					command = "tinymist.pinMain",
+					arguments = { vim.v.null },
+				}, { bufnr = args.buf })
+			end, { desc = "[T]inymist [U]npin", noremap = true })
+		end
 	end,
 })
 
 vim.lsp.config("tinymist", {
-	on_attach = function(client, bufnr)
-		vim.keymap.set("n", "<leader>tp", function()
-			client:exec_cmd({
-				title = "pin",
-				command = "tinymist.pinMain",
-				arguments = { vim.api.nvim_buf_get_name(0) },
-			}, { bufnr = bufnr })
-		end, { desc = "[T]inymist [P]in", noremap = true })
-		vim.keymap.set("n", "<leader>tu", function()
-			client:exec_cmd({
-				title = "unpin",
-				command = "tinymist.pinMain",
-				arguments = { vim.v.null },
-			}, { bufnr = bufnr })
-		end, { desc = "[T]inymist [U]npin", noremap = true })
-	end,
 	settings = {
 		formatterMode = "typstyle",
 		-- specify local relative paths for fonts (must be consistent with preview setting & CLI args!)
