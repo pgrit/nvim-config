@@ -240,25 +240,29 @@ require("lazy").setup({
 					-- full path (with long intermediate dirs shortened) after it
 					file = function(item, ctx)
 						local fname = vim.fn.fnamemodify(item.file, ":~")
-						local dirname = fname:match("^.*/(.+)$")
+						local path, dirname = fname:match("^(.*)/(.+)$")
 
-						-- Shorten the full path to fit the width
-						fname = ctx.width and #fname > ctx.width and vim.fn.pathshorten(fname) or fname
-						if #fname > ctx.width then
-							local dir = vim.fn.fnamemodify(fname, ":h")
-							local file = vim.fn.fnamemodify(fname, ":t")
+						local extra = #dirname + 1 -- width of the preceeding directory name
+
+						-- Shorten the full path to fit the remaining width.
+						-- First via vim logic, then by dropping intermediate dirs
+						path = ctx.width and #path + extra > ctx.width and vim.fn.pathshorten(path) or path
+						if #path > ctx.width then
+							local dir = vim.fn.fnamemodify(path, ":h")
+							local file = vim.fn.fnamemodify(path, ":t")
 							if dir and file then
 								file = file:sub(-(ctx.width - #dir - 2))
-								fname = dir .. "/…" .. file
+								path = dir .. "/…" .. file
 							end
 						end
-						local dir, file = fname:match("^(.*)/(.+)$")
-						return dir
+
+						-- local dir, file = fname:match("^(.*)/(.+)$")
+						return path
 								and {
 									{ dirname, hl = "file" }, -- Last file / directory, highlighted
 									{ " " },
-									{ dir .. "/", hl = "dir" }, -- Path (shortened)
-									{ file, hl = "dir" }, -- hl = "dir" to not highlight twice
+									{ path .. "/", hl = "dir" }, -- Path (shortened)
+									-- { file, hl = "dir" }, -- hl = "dir" to not highlight twice
 								}
 							or { { fname, hl = "file" } }
 					end,
