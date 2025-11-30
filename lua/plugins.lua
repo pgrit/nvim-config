@@ -125,7 +125,7 @@ require("lazy").setup({
 				"pylsp",
 				"ts_ls",
 				"html",
-				"omnisharp",
+				"csharp_ls",
 				"fsautocomplete",
 				"tinymist",
 				"clangd",

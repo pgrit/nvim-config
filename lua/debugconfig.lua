@@ -1,5 +1,7 @@
 local dap, dapui = require("dap"), require("dapui")
 
+-- -----------------------------
+-- C#
 dap.adapters.coreclr = {
 	type = "executable",
 	command = "netcoredbg",
@@ -37,6 +39,42 @@ dap.configurations.cs = {
 
 			return coroutine.yield()
 		end,
+	},
+}
+
+-- -----------------------------
+-- Rust
+dap.adapters.lldb = {
+  type = 'executable',
+  command = 'codelldb',
+  name = 'lldb'
+}
+
+dap.configurations.rust = {
+	{
+		name = "rust",
+		type = "lldb",
+		request = "launch",
+		program = function()
+			local co = coroutine.running()
+
+			Snacks.picker.pick({
+				source = "files",
+				prompt = "EXE: ",
+                pattern = "target/debug",
+				exclude = {},
+				ignored = true,
+				confirm = function(picker, item)
+					picker:close()
+					print("Launching: " .. item.file)
+					coroutine.resume(co, item.file)
+				end,
+			})
+
+			return coroutine.yield()
+		end,
+		cwd = "${workspaceFolder}",
+		stopOnEntry = false,
 	},
 }
 
