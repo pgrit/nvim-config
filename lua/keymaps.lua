@@ -16,6 +16,7 @@ map('n', '<Home>', '^')
 map('v', '<Home>', '^')
 map('i', '<Home>', '<Esc>^i')
 
+-- Shortcut to clear search results
 vim.keymap.set('n', '<Leader>c', ':let @/ = ""<CR>', opts)
 
 -- Switch to next and previous buffer
@@ -75,6 +76,11 @@ vim.keymap.set({'n', 'v'}, "<C-f>", function()
 	require("conform").format({ async = true, lsp_fallback = true })
 end)
 
+--------------------------
+-- IDE-like functions   --
+--------------------------
+
+vim.keymap.set("n", "<C-b>", ":!dotnet build<CR>", opts)
 
 --------------------------
 -- QoL plugins triggers --
@@ -83,6 +89,8 @@ end)
 vim.keymap.set('n', '<Leader>e', (function () Snacks.explorer() end), opts)
 vim.keymap.set('n', '<Leader>g', (function () Snacks.lazygit() end), opts)
 vim.keymap.set('n', '<Leader>gg', (function () Snacks.lazygit() end), opts)
-vim.keymap.set({'n', 'v', 'i'}, '<Leader>h', (function () Snacks.notifier.show_history() end), opts)
+vim.keymap.set({'n', 'v'}, '<Leader>h', (function () Snacks.notifier.show_history() end), opts)
 
 vim.keymap.set('n', '<Leader>`', (function () Snacks.terminal() end), opts)
+
+

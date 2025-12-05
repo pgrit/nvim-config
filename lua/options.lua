@@ -42,3 +42,6 @@ vim.filetype.add({
     ['.*.axaml'] = 'xml',
   },
 })
+
+-- Use space as <leader>
+vim.g.mapleader = " "
