@@ -74,7 +74,7 @@ vim.lsp.config("pylsp", {
 vim.lsp.config("ltex", {
 	settings = {
 		ltex = {
-			enabled = { "latex", "markdown" },
+			enabled = { "latex", "markdown", "typst" },
 		},
 	},
 })
@@ -105,6 +105,9 @@ vim.lsp.config("lua_ls", {
 			},
 			telemetry = {
 				enable = false,
+			},
+			format = {
+				-- enable = false,
 			},
 		},
 	},

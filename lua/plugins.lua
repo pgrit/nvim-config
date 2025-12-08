@@ -123,15 +123,23 @@ require("lazy").setup({
 		opts = {
 			ensure_installed = {
 				"pylsp",
+
 				"ts_ls",
 				"html",
+
 				"csharp_ls",
 				"fsautocomplete",
+
 				"tinymist",
+				"ltex_plus",
+                "marksman",
+				"texlab",
+
 				"clangd",
 				"arduino_language_server",
-				"ltex",
-				"texlab",
+                "rust_analyzer",
+
+                "lua_ls",
 			},
 		},
 	},
