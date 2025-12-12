@@ -44,33 +44,6 @@ vim.keymap.set("n", "<C-Right>", ":vertical resize +2<CR>", opts)
 vim.keymap.set("v", "<", "<gv", opts)
 vim.keymap.set("v", ">", ">gv", opts)
 
------------------
--- Debug mode --
------------------
-
-vim.keymap.set("n", "<F5>", function()
-    require("dap").continue()
-end, opts)
-vim.keymap.set("n", "<F10>", function()
-    require("dap").step_over()
-end, opts)
-vim.keymap.set("n", "<F11>", function()
-    require("dap").step_into()
-end, opts)
-vim.keymap.set("n", "<F9>", function()
-    require("dap").toggle_breakpoint()
-end, opts)
-vim.keymap.set("n", "<Leader>dr", function()
-    require("dap").repl.open()
-end, opts)
-
-vim.keymap.set("n", "<Leader>do", function()
-    require("dapui").open()
-end, opts)
-vim.keymap.set("n", "<Leader>dc", function()
-    require("dapui").close()
-end, opts)
-
 -------------------------
 -- Diagnostics and LSP --
 -------------------------

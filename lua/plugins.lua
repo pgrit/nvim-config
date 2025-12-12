@@ -158,6 +158,43 @@ require("lazy").setup({
     },
     {
         "mfussenegger/nvim-dap",
+        keys = {
+            {
+                "<F5>",
+                function()
+                    require("dap").continue()
+                end,
+                "Start / continue debug session"
+            },
+            {
+                "<F6>",
+                function()
+                    require("dap").terminate()
+                end,
+                "Terminate debug session"
+            },
+            {
+                "<F10>",
+                function()
+                    require("dap").step_over()
+                end,
+                "Step over"
+            },
+            {
+                "<F12>",
+                function()
+                    require("dap").step_into()
+                end,
+                "Step into"
+            },
+            {
+                "<F9>",
+                function()
+                    require("dap").toggle_breakpoint()
+                end,
+                "Toggle breakpoint"
+            },
+        }
     },
     { "nvim-neotest/nvim-nio" },
     {
@@ -165,6 +202,32 @@ require("lazy").setup({
         opts = {
             ensure_installed = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
         },
+        keys = {
+            {
+                "<leader>de",
+                function()
+                    local dapui = require("dapui")
+                    -- Invoke twice so we focus the float by default
+                    dapui.eval()
+                    dapui.eval()
+                end,
+                desc = "Evaluate in floating window",
+            },
+            {
+                "<leader>do",
+                function()
+                    require("dapui").open()
+                end,
+                "Open debug UI"
+            },
+            {
+                "<leader>dc",
+                function()
+                    require("dapui").close()
+                end,
+                "Close debug UI"
+            },
+        }
     },
     { "mfussenegger/nvim-dap-python" },
     {
