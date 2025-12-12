@@ -269,7 +269,7 @@ require("lazy").setup({
                             and {
                                 { dirname,     hl = "file" }, -- Last file / directory, highlighted
                                 { " " },
-                                { path .. "/", hl = "dir" }, -- Path (shortened)
+                                { path .. "/", hl = "dir" },  -- Path (shortened)
                                 -- { file, hl = "dir" }, -- hl = "dir" to not highlight twice
                             }
                             or { { fname, hl = "file" } }
@@ -358,7 +358,7 @@ require("lazy").setup({
                 mode = "diagnostics", -- inherit from diagnostics mode
                 filter = {
                     any = {
-                        buf = 0,                 -- current buffer
+                        buf = 0,                                      -- current buffer
                         {
                             severity = vim.diagnostic.severity.ERROR, -- errors only
                             -- limit to files in the current project
@@ -394,7 +394,7 @@ require("lazy").setup({
     {
         "rachartier/tiny-inline-diagnostic.nvim",
         event = "VeryLazy", -- Or `LspAttach`
-        priority = 1000, -- needs to be loaded in first
+        priority = 1000,    -- needs to be loaded in first
         config = function()
             require("tiny-inline-diagnostic").setup({
                 preset = "minimal",
@@ -405,7 +405,21 @@ require("lazy").setup({
     {
         "linrongbin16/gitlinker.nvim",
         cmd = "GitLink",
-        opts = {},
+        config = function()
+            require("gitlinker").setup({
+                router = {
+                    browse = {
+                        ["^gitlab%.cs%.uni%-saarland%.de"] = "https://gitlab.cs.uni-saarland.de/"
+                            .. "{_A.ORG}/"
+                            .. "{_A.REPO}/blob/"
+                            .. "{_A.REV}/"
+                            .. "{_A.FILE}"
+                            .. "#L{_A.LSTART}"
+                            .. "{(_A.LEND > _A.LSTART and ('-L' .. _A.LEND) or '')}",
+                    }
+                }
+            })
+        end,
         keys = {
             { "<leader>gl", "<cmd>GitLink<cr>", mode = { "n", "v" }, desc = "Yank git link" },
         },
