@@ -1,499 +1,550 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-    vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
-        lazypath,
-    })
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
 vim.opt.rtp:prepend(lazypath)
 
 local isolated_completion_kind = nil
 local function isolate_completion(example, tbl)
-    -- local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-    if isolated_completion_kind ~= nil and isolated_completion_kind[example] ~= nil then
-        isolated_completion_kind = nil -- Reset completion filter
-    else
-        isolated_completion_kind = tbl
-    end
-    require("blink.cmp").cancel()
-    vim.schedule(require("blink.cmp").show)
+  -- local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+  if isolated_completion_kind ~= nil and isolated_completion_kind[example] ~= nil then
+    isolated_completion_kind = nil -- Reset completion filter
+  else
+    isolated_completion_kind = tbl
+  end
+  require("blink.cmp").cancel()
+  vim.schedule(require("blink.cmp").show)
 end
 
 require("lazy").setup({
-    { "nvim-treesitter/nvim-treesitter", lazy = false, branch = "main", build = ":TSUpdate" },
-    { "tanvirtin/monokai.nvim" },
-    { "xzbdmw/colorful-menu.nvim" },
-    {
-        "saghen/blink.cmp",
-        version = "1.*",
-        opts = {
-            keymap = {
-                preset = "super-tab",
-                ["<Up>"] = { "select_prev", "fallback" },
-                ["<Down>"] = { "select_next", "fallback" },
-                ["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
+  { "nvim-treesitter/nvim-treesitter", lazy = false, branch = "main", build = ":TSUpdate" },
+  { "tanvirtin/monokai.nvim" },
+  { "xzbdmw/colorful-menu.nvim" },
+  {
+    "saghen/blink.cmp",
+    version = "1.*",
+    opts = {
+      keymap = {
+        preset = "super-tab",
+        ["<Up>"] = { "select_prev", "fallback" },
+        ["<Down>"] = { "select_next", "fallback" },
+        ["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
 
-                -- Show only variable-like symbols
-                ["<C-v>"] = {
-                    function()
-                        local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-                        isolate_completion(CompletionItemKind.Property, {
-                            [CompletionItemKind.Field] = true,
-                            [CompletionItemKind.Variable] = true,
-                            [CompletionItemKind.Property] = true,
-                            [CompletionItemKind.EnumMember] = true,
-                            [CompletionItemKind.Constant] = true,
-                            [CompletionItemKind.Event] = true,
-                        })
-                    end,
-                },
-                -- Show only function-like symbols
-                ["<C-f>"] = {
-                    function()
-                        local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-                        isolate_completion(CompletionItemKind.Method, {
-                            [CompletionItemKind.Method] = true,
-                            [CompletionItemKind.Function] = true,
-                            [CompletionItemKind.Constructor] = true,
-                            [CompletionItemKind.Operator] = true,
-                        })
-                    end,
-                },
-                -- Show only type-like symbols
-                ["<C-t>"] = {
-                    function()
-                        local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-                        isolate_completion(CompletionItemKind.Class, {
-                            [CompletionItemKind.Class] = true,
-                            [CompletionItemKind.Interface] = true,
-                            [CompletionItemKind.Module] = true,
-                            [CompletionItemKind.Enum] = true,
-                            [CompletionItemKind.Struct] = true,
-                            [CompletionItemKind.TypeParameter] = true,
-                            [CompletionItemKind.Keyword] = true,
-                        })
-                    end,
-                },
-            },
-            fuzzy = { implementation = "prefer_rust_with_warning" },
-            completion = {
-                keyword = { range = "full" },
-                menu = {
-                    draw = {
-                        columns = { { "kind_icon", gap = 1, "kind" }, { "label", gap = 1 }, { "source_id", gap = 1 } },
-                        components = {
-                            label = {
-                                text = function(ctx)
-                                    return require("colorful-menu").blink_components_text(ctx)
-                                end,
-                                highlight = function(ctx)
-                                    return require("colorful-menu").blink_components_highlight(ctx)
-                                end,
-                            },
-                        },
-                    },
-                },
-                trigger = { show_on_trigger_character = true },
-                documentation = {
-                    auto_show = true,
-                },
-            },
-            signature = { enabled = true },
-            sources = {
-                transform_items = function(_, items)
-                    items = vim.tbl_filter(function(item)
-                        return isolated_completion_kind == nil or isolated_completion_kind[item.kind] ~= nil
-                    end, items)
-                    return items
-                end,
-            },
-        },
-    },
-    { "mason-org/mason.nvim",         opts = {} },
-    {
-        "mason-org/mason-lspconfig.nvim",
-        dependencies = {
-            "mason-org/mason.nvim",
-            "neovim/nvim-lspconfig",
-        },
-        opts = {
-            ensure_installed = {
-                "pylsp",
-
-                "ts_ls",
-                "html",
-
-                "csharp_ls",
-                "fsautocomplete",
-
-                "tinymist",
-                "ltex_plus",
-                "marksman",
-                "texlab",
-
-                "clangd",
-                "arduino_language_server",
-                "rust_analyzer",
-
-                "lua_ls",
-            },
-        },
-    },
-    { "nvim-telescope/telescope.nvim" },
-    {
-        "chomosuke/typst-preview.nvim",
-        lazy = false,
-        version = "1.*",
-        opts = {
-            dependencies_bin = {
-                ["tinymist"] = "tinymist", -- Use tinymist installed via Mason, assuming it is in path (avoids version mismatch between LSP and preview)
-            },
-            -- specify local relative paths for fonts (must be consistent with LSP setting & CLI args!)
-            extra_args = { "--font-path", "./common/fonts", "--font-path", "./fonts" },
-        },
-    },
-    {
-        "mfussenegger/nvim-dap",
-        keys = {
-            {
-                "<F5>",
-                function()
-                    require("dap").continue()
-                end,
-                "Start / continue debug session"
-            },
-            {
-                "<F6>",
-                function()
-                    require("dap").terminate()
-                end,
-                "Terminate debug session"
-            },
-            {
-                "<F10>",
-                function()
-                    require("dap").step_over()
-                end,
-                "Step over"
-            },
-            {
-                "<F12>",
-                function()
-                    require("dap").step_into()
-                end,
-                "Step into"
-            },
-            {
-                "<F9>",
-                function()
-                    require("dap").toggle_breakpoint()
-                end,
-                "Toggle breakpoint"
-            },
-        }
-    },
-    { "nvim-neotest/nvim-nio" },
-    {
-        "rcarriga/nvim-dap-ui",
-        opts = {
-            ensure_installed = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
-        },
-        keys = {
-            {
-                "<leader>de",
-                function()
-                    local dapui = require("dapui")
-                    -- Invoke twice so we focus the float by default
-                    dapui.eval()
-                    dapui.eval()
-                end,
-                desc = "Evaluate in floating window",
-            },
-            {
-                "<leader>do",
-                function()
-                    require("dapui").open()
-                end,
-                "Open debug UI"
-            },
-            {
-                "<leader>dc",
-                function()
-                    require("dapui").close()
-                end,
-                "Close debug UI"
-            },
-        }
-    },
-    { "mfussenegger/nvim-dap-python" },
-    {
-        "lewis6991/gitsigns.nvim",
-        keys = {
-            {
-                "<leader>gb",
-                "<cmd>Gitsigns toggle_current_line_blame<cr>",
-                desc = "Toggle git inline blame",
-            },
-            {
-                "<leader>gc",
-                "<cmd>Gitsigns setloclist<cr>",
-                desc = "Show list of git change locations",
-            },
-            {
-                "<leader>gd",
-                "<cmd>Gitsigns diffthis<cr>",
-                desc = "Show git diff",
-            },
-        },
-        lazy = false,
-    },
-    { "tpope/vim-commentary" },
-    {
-        "nvim-lualine/lualine.nvim",
-        dependencies = { "nvim-tree/nvim-web-devicons" },
-    },
-    {
-        "iamcco/markdown-preview.nvim",
-        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-        ft = { "markdown" },
-        build = function()
-            vim.cmd([[Lazy load markdown-preview.nvim]])
-            vim.fn["mkdp#util#install"]()
-        end,
-    },
-    {
-        "windwp/nvim-autopairs",
-        event = "InsertEnter",
-        config = true,
-    },
-    {
-        "folke/snacks.nvim",
-        ---@type snacks.Config
-        opts = {
-            -- scroll = {},
-            dashboard = {
-                preset = {
-                    -- Used by the `keys` section to show keymaps.
-                    -- When using a function, the `items` argument are the default keymaps.
-                    ---@type snacks.dashboard.Item[]
-                    keys = {
-                        { icon = " ", key = "q", desc = "Quit", action = ":qa" },
-                    },
-                },
-                sections = {
-                    {
-                        icon = " ",
-                        title = "Projects",
-                        section = "projects",
-                        limit = 20,
-                        indent = 2,
-                        padding = 2,
-                    },
-                    { section = "keys",   gap = 1 },
-                    { section = "startup" },
-                },
-                formats = {
-                    -- Workaround: autokeys on the very right is not easy to
-                    -- visually map to the dictionary / you want to open.
-                    -- So we replace the icon with the key.
-                    icon = function(item)
-                        if item.file and item.icon == "file" or item.icon == "directory" then
-                            return { item.key, width = 1, hl = "key" }
-                        end
-                        return { item.icon, width = 2, hl = "icon" }
-                    end,
-
-                    -- Highlight the last directory / file in a path, write the
-                    -- full path (with long intermediate dirs shortened) after it
-                    file = function(item, ctx)
-                        local fname = vim.fn.fnamemodify(item.file, ":~")
-                        local path, dirname = fname:match("^(.*)/(.+)$")
-
-                        local extra = #dirname + 1 -- width of the preceeding directory name
-
-                        -- Shorten the full path to fit the remaining width.
-                        -- First via vim logic, then by dropping intermediate dirs
-                        path = ctx.width and #path + extra > ctx.width and vim.fn.pathshorten(path) or path
-                        if #path > ctx.width then
-                            local dir = vim.fn.fnamemodify(path, ":h")
-                            local file = vim.fn.fnamemodify(path, ":t")
-                            if dir and file then
-                                file = file:sub(-(ctx.width - #dir - 2))
-                                path = dir .. "/…" .. file
-                            end
-                        end
-
-                        -- local dir, file = fname:match("^(.*)/(.+)$")
-                        return path
-                            and {
-                                { dirname,     hl = "file" }, -- Last file / directory, highlighted
-                                { " " },
-                                { path .. "/", hl = "dir" },  -- Path (shortened)
-                                -- { file, hl = "dir" }, -- hl = "dir" to not highlight twice
-                            }
-                            or { { fname, hl = "file" } }
-                    end,
-                },
-            },
-            picker = {
-                sources = {
-                    explorer = {
-                        layout = {
-                            layout = {
-                                width = 25,
-                            },
-                        },
-                    },
-                },
-            },
-            explorer = {},
-            indent = {},
-            input = {},
-            lazygit = {},
-            statuscolumn = {},
-            words = {},
-            notifier = {
-                timeout = 6000,
-                width = { min = 40, max = 0.8 },
-                margin = { top = 1 },
-            },
-            ---@type table<string, snacks.win.Config>
-            styles = {
-                sidebar = {
-                    width = 4,
-                },
-                notification = {
-                    wo = { wrap = true },
-                },
-                notification_history = {
-                    border = true,
-                    zindex = 100,
-                    width = 0.9,
-                    height = 0.9,
-                    minimal = false,
-                    title = " Notification History ",
-                    title_pos = "center",
-                    ft = "markdown",
-                    bo = { filetype = "snacks_notif_history", modifiable = false },
-                    wo = { winhighlight = "Normal:SnacksNotifierHistory" },
-                    keys = { q = "close" },
-                },
-            },
-        },
-    },
-    {
-        "stevearc/conform.nvim",
-        opts = {},
-    },
-    { "jlcrochet/vim-razor" },
-    {
-        "folke/trouble.nvim",
-        opts = {}, -- for default options, refer to the configuration section for custom setup.
-        cmd = "Trouble",
-        keys = {
-            {
-                "<leader>x",
-                "<cmd>Trouble diagnostics toggle<cr>",
-                desc = "Diagnostics (Trouble)",
-            },
-            {
-                "<leader>xx",
-                "<cmd>Trouble diagnostics toggle<cr>",
-                desc = "Diagnostics (Trouble)",
-            },
-            {
-                "<leader>xs",
-                "<cmd>Trouble symbols toggle focus=true<cr>",
-                desc = "Symbols (Trouble)",
-            },
-            {
-                "<leader>xd",
-                "<cmd>Trouble lsp toggle focus=true win.position=bottom<cr>",
-                desc = "LSP Definitions / references / ... (Trouble)",
-            },
-        },
-        modes = {
-            mydiags = {
-                mode = "diagnostics", -- inherit from diagnostics mode
-                filter = {
-                    any = {
-                        buf = 0,                                      -- current buffer
-                        {
-                            severity = vim.diagnostic.severity.ERROR, -- errors only
-                            -- limit to files in the current project
-                            function(item)
-                                return item.filename:find((vim.loop or vim.uv).cwd(), 1, true)
-                            end,
-                        },
-                    },
-                },
-            },
-        },
-    },
-    {
-        "folke/todo-comments.nvim",
-        lazy = false,
-        dependencies = { "nvim-lua/plenary.nvim" },
-        opts = {
-            highlight = {
-                pattern = [[.*<(KEYWORDS)\s*]],
-            },
-            search = {
-                pattern = [[\b(KEYWORDS)\b]],
-            },
-        },
-        keys = {
-            {
-                "<leader>xt",
-                "<cmd>TodoTrouble<cr>",
-                desc = "Show TODO comments (Trouble)",
-            },
-        },
-    },
-    {
-        "rachartier/tiny-inline-diagnostic.nvim",
-        event = "VeryLazy", -- Or `LspAttach`
-        priority = 1000,    -- needs to be loaded in first
-        config = function()
-            require("tiny-inline-diagnostic").setup({
-                preset = "minimal",
+        -- Show only variable-like symbols
+        ["<C-v>"] = {
+          function()
+            local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+            isolate_completion(CompletionItemKind.Property, {
+              [CompletionItemKind.Field] = true,
+              [CompletionItemKind.Variable] = true,
+              [CompletionItemKind.Property] = true,
+              [CompletionItemKind.EnumMember] = true,
+              [CompletionItemKind.Constant] = true,
+              [CompletionItemKind.Event] = true,
             })
-            vim.diagnostic.config({ virtual_text = false }) -- Only if needed in your configuration, if you already have native LSP diagnostics
+          end,
+        },
+        -- Show only function-like symbols
+        ["<C-f>"] = {
+          function()
+            local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+            isolate_completion(CompletionItemKind.Method, {
+              [CompletionItemKind.Method] = true,
+              [CompletionItemKind.Function] = true,
+              [CompletionItemKind.Constructor] = true,
+              [CompletionItemKind.Operator] = true,
+            })
+          end,
+        },
+        -- Show only type-like symbols
+        ["<C-t>"] = {
+          function()
+            local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+            isolate_completion(CompletionItemKind.Class, {
+              [CompletionItemKind.Class] = true,
+              [CompletionItemKind.Interface] = true,
+              [CompletionItemKind.Module] = true,
+              [CompletionItemKind.Enum] = true,
+              [CompletionItemKind.Struct] = true,
+              [CompletionItemKind.TypeParameter] = true,
+              [CompletionItemKind.Keyword] = true,
+            })
+          end,
+        },
+      },
+      fuzzy = { implementation = "prefer_rust_with_warning" },
+      completion = {
+        keyword = { range = "full" },
+        menu = {
+          draw = {
+            columns = { { "kind_icon", gap = 1, "kind" }, { "label", gap = 1 }, { "source_id", gap = 1 } },
+            components = {
+              label = {
+                text = function(ctx)
+                  return require("colorful-menu").blink_components_text(ctx)
+                end,
+                highlight = function(ctx)
+                  return require("colorful-menu").blink_components_highlight(ctx)
+                end,
+              },
+            },
+          },
+        },
+        trigger = { show_on_trigger_character = true },
+        documentation = {
+          auto_show = true,
+        },
+      },
+      signature = { enabled = true },
+      sources = {
+        transform_items = function(_, items)
+          items = vim.tbl_filter(function(item)
+            return isolated_completion_kind == nil or isolated_completion_kind[item.kind] ~= nil
+          end, items)
+          return items
         end,
+      },
     },
-    {
-        "linrongbin16/gitlinker.nvim",
-        cmd = "GitLink",
-        config = function()
-            require("gitlinker").setup({
-                router = {
-                    browse = {
-                        ["^gitlab%.cs%.uni%-saarland%.de"] = "https://gitlab.cs.uni-saarland.de/"
-                            .. "{_A.ORG}/"
-                            .. "{_A.REPO}/blob/"
-                            .. "{_A.REV}/"
-                            .. "{_A.FILE}"
-                            .. "#L{_A.LSTART}"
-                            .. "{(_A.LEND > _A.LSTART and ('-L' .. _A.LEND) or '')}",
-                    }
+  },
+  { "mason-org/mason.nvim", opts = {} },
+  {
+    "mason-org/mason-lspconfig.nvim",
+    dependencies = {
+      "mason-org/mason.nvim",
+      "neovim/nvim-lspconfig",
+    },
+    opts = {
+      ensure_installed = {
+        "pylsp",
+
+        "ts_ls",
+        "html",
+
+        "csharp_ls",
+        "fsautocomplete",
+
+        "tinymist",
+        "ltex_plus",
+        "marksman",
+        "texlab",
+
+        "clangd",
+        "arduino_language_server",
+        "rust_analyzer",
+
+        "lua_ls",
+      },
+    },
+  },
+  {
+    "chomosuke/typst-preview.nvim",
+    lazy = false,
+    version = "1.*",
+    opts = {
+      dependencies_bin = {
+        ["tinymist"] = "tinymist", -- Use tinymist installed via Mason, assuming it is in path (avoids version mismatch between LSP and preview)
+      },
+      -- specify local relative paths for fonts (must be consistent with LSP setting & CLI args!)
+      extra_args = { "--font-path", "./common/fonts", "--font-path", "./fonts" },
+    },
+  },
+  {
+    "mfussenegger/nvim-dap",
+    keys = {
+      {
+        "<F5>",
+        function()
+          require("dap").continue()
+        end,
+        "Start / continue debug session"
+      },
+      {
+        "<F6>",
+        function()
+          require("dap").terminate()
+        end,
+        "Terminate debug session"
+      },
+      {
+        "<F10>",
+        function()
+          require("dap").step_over()
+        end,
+        "Step over"
+      },
+      {
+        "<F12>",
+        function()
+          require("dap").step_into()
+        end,
+        "Step into"
+      },
+      {
+        "<F9>",
+        function()
+          require("dap").toggle_breakpoint()
+        end,
+        "Toggle breakpoint"
+      },
+    }
+  },
+  { "nvim-neotest/nvim-nio" },
+  {
+    "rcarriga/nvim-dap-ui",
+    opts = {
+      ensure_installed = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+    },
+    keys = {
+      {
+        "<leader>de",
+        function()
+          local dapui = require("dapui")
+          -- Invoke twice so we focus the float by default
+          dapui.eval()
+          dapui.eval()
+        end,
+        desc = "Evaluate in floating window",
+      },
+      {
+        "<leader>do",
+        function()
+          require("dapui").open()
+        end,
+        "Open debug UI"
+      },
+      {
+        "<leader>dc",
+        function()
+          require("dapui").close()
+        end,
+        "Close debug UI"
+      },
+    }
+  },
+  { "mfussenegger/nvim-dap-python" },
+  {
+    "lewis6991/gitsigns.nvim",
+    keys = {
+      {
+        "<leader>gb",
+        "<cmd>Gitsigns toggle_current_line_blame<cr>",
+        desc = "Toggle git inline blame",
+      },
+      {
+        "<leader>gc",
+        "<cmd>Gitsigns setloclist<cr>",
+        desc = "Show list of git change locations",
+      },
+      {
+        "<leader>gd",
+        "<cmd>Gitsigns diffthis<cr>",
+        desc = "Show git diff",
+      },
+    },
+    lazy = false,
+  },
+  { "tpope/vim-commentary" },
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    build = function()
+      vim.cmd([[Lazy load markdown-preview.nvim]])
+      vim.fn["mkdp#util#install"]()
+    end,
+  },
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = true,
+  },
+  {
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    opts = {
+      -- scroll = {},
+      dashboard = {
+        preset = {
+          -- Used by the `keys` section to show keymaps.
+          -- When using a function, the `items` argument are the default keymaps.
+          ---@type snacks.dashboard.Item[]
+          keys = {
+            { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+          },
+        },
+        sections = {
+          {
+            icon = " ",
+            title = "Projects",
+            section = "projects",
+            limit = 20,
+            indent = 2,
+            padding = 2,
+          },
+          { section = "keys",   gap = 1 },
+          { section = "startup" },
+        },
+        formats = {
+          -- Workaround: autokeys on the very right is not easy to
+          -- visually map to the dictionary / you want to open.
+          -- So we replace the icon with the key.
+          icon = function(item)
+            if item.file and item.icon == "file" or item.icon == "directory" then
+              return { item.key, width = 1, hl = "key" }
+            end
+            return { item.icon, width = 2, hl = "icon" }
+          end,
+
+          -- Highlight the last directory / file in a path, write the
+          -- full path (with long intermediate dirs shortened) after it
+          file = function(item, ctx)
+            local fname = vim.fn.fnamemodify(item.file, ":~")
+            local path, dirname = fname:match("^(.*)/(.+)$")
+
+            local extra = #dirname + 1 -- width of the preceeding directory name
+
+            -- Shorten the full path to fit the remaining width.
+            -- First via vim logic, then by dropping intermediate dirs
+            path = ctx.width and #path + extra > ctx.width and vim.fn.pathshorten(path) or path
+            if #path > ctx.width then
+              local dir = vim.fn.fnamemodify(path, ":h")
+              local file = vim.fn.fnamemodify(path, ":t")
+              if dir and file then
+                file = file:sub(-(ctx.width - #dir - 2))
+                path = dir .. "/…" .. file
+              end
+            end
+
+            -- local dir, file = fname:match("^(.*)/(.+)$")
+            return path
+                and {
+                  { dirname,     hl = "file" }, -- Last file / directory, highlighted
+                  { " " },
+                  { path .. "/", hl = "dir" },  -- Path (shortened)
+                  -- { file, hl = "dir" }, -- hl = "dir" to not highlight twice
                 }
-            })
-        end,
-        keys = {
-            { "<leader>gl", "<cmd>GitLink<cr>", mode = { "n", "v" }, desc = "Yank git link" },
+                or { { fname, hl = "file" } }
+          end,
         },
+      },
+      picker = {
+        sources = {
+          explorer = {
+            layout = {
+              layout = {
+                width = 25,
+              },
+            },
+          },
+        },
+      },
+      explorer = {},
+      indent = {},
+      input = {},
+      lazygit = {},
+      statuscolumn = {},
+      words = {},
+      notifier = {
+        timeout = 6000,
+        width = { min = 40, max = 0.8 },
+        margin = { top = 1 },
+      },
+      ---@type table<string, snacks.win.Config>
+      styles = {
+        sidebar = {
+          width = 4,
+        },
+        notification = {
+          wo = { wrap = true },
+        },
+        notification_history = {
+          border = true,
+          zindex = 100,
+          width = 0.9,
+          height = 0.9,
+          minimal = false,
+          title = " Notification History ",
+          title_pos = "center",
+          ft = "markdown",
+          bo = { filetype = "snacks_notif_history", modifiable = false },
+          wo = { winhighlight = "Normal:SnacksNotifierHistory" },
+          keys = { q = "close" },
+        },
+      },
     },
-    {
-        "aznhe21/actions-preview.nvim",
-        config = function()
-            vim.keymap.set({ "v", "n" }, "gf", require("actions-preview").code_actions)
+    lazy = false,
+    keys = {
+      {
+        "<leader>f",
+        function()
+          Snacks.picker()
         end,
+        "Show all pickers"
+      },
+      {
+        "<leader>ff",
+        function()
+          Snacks.picker("files")
+        end,
+        "Find file"
+      },
+      {
+        "<leader>fg",
+        function()
+          Snacks.picker("grep")
+        end,
+        "Grep"
+      },
+      {
+        "<leader>fb",
+        function()
+          Snacks.picker("buffers")
+        end,
+        "Pick open buffer"
+      },
+      {
+        "<leader>ft",
+        function()
+          Snacks.picker("todo_comments")
+        end,
+        "Pick TODO comments"
+      },
+      {
+        "<leader>fs",
+        function()
+          Snacks.picker("lsp_workspace_symbols")
+        end,
+        "Pick symbols in workspace"
+      },
+      {
+        "<leader>fl",
+        function()
+          Snacks.picker("lsp_symbols")
+        end,
+        "Pick symbols in buffer"
+      },
+    }
+  },
+  {
+    "stevearc/conform.nvim",
+    opts = {},
+  },
+  { "jlcrochet/vim-razor" },
+  {
+    "folke/trouble.nvim",
+    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    cmd = "Trouble",
+    keys = {
+      {
+        "<leader>x",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>xx",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>xs",
+        "<cmd>Trouble symbols toggle focus=true<cr>",
+        desc = "Symbols (Trouble)",
+      },
+      {
+        "<leader>xd",
+        "<cmd>Trouble lsp toggle focus=true win.position=bottom<cr>",
+        desc = "LSP Definitions / references / ... (Trouble)",
+      },
     },
-    {
-        "ionide/Ionide-vim",
+    modes = {
+      mydiags = {
+        mode = "diagnostics", -- inherit from diagnostics mode
+        filter = {
+          any = {
+            buf = 0,                                    -- current buffer
+            {
+              severity = vim.diagnostic.severity.ERROR, -- errors only
+              -- limit to files in the current project
+              function(item)
+                return item.filename:find((vim.loop or vim.uv).cwd(), 1, true)
+              end,
+            },
+          },
+        },
+      },
     },
+  },
+  {
+    "folke/todo-comments.nvim",
+    lazy = false,
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      highlight = {
+        pattern = [[.*<(KEYWORDS)\s*]],
+      },
+      search = {
+        pattern = [[\b(KEYWORDS)\b]],
+      },
+    },
+    keys = {
+      {
+        "<leader>xt",
+        "<cmd>TodoTrouble<cr>",
+        desc = "Show TODO comments (Trouble)",
+      },
+    },
+  },
+  {
+    "rachartier/tiny-inline-diagnostic.nvim",
+    event = "VeryLazy", -- Or `LspAttach`
+    priority = 1000,    -- needs to be loaded in first
+    config = function()
+      require("tiny-inline-diagnostic").setup({
+        preset = "minimal",
+      })
+      vim.diagnostic.config({ virtual_text = false }) -- Only if needed in your configuration, if you already have native LSP diagnostics
+    end,
+  },
+  {
+    "linrongbin16/gitlinker.nvim",
+    cmd = "GitLink",
+    config = function()
+      require("gitlinker").setup({
+        router = {
+          browse = {
+            ["^gitlab%.cs%.uni%-saarland%.de"] = "https://gitlab.cs.uni-saarland.de/"
+                .. "{_A.ORG}/"
+                .. "{_A.REPO}/blob/"
+                .. "{_A.REV}/"
+                .. "{_A.FILE}"
+                .. "#L{_A.LSTART}"
+                .. "{(_A.LEND > _A.LSTART and ('-L' .. _A.LEND) or '')}",
+          }
+        }
+      })
+    end,
+    keys = {
+      { "<leader>gl", "<cmd>GitLink<cr>", mode = { "n", "v" }, desc = "Yank git link" },
+    },
+  },
+  {
+    "aznhe21/actions-preview.nvim",
+    config = function()
+      vim.keymap.set({ "v", "n" }, "gf", require("actions-preview").code_actions)
+    end,
+  },
+  {
+    "ionide/Ionide-vim",
+  },
 })
