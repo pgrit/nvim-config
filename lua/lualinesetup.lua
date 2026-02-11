@@ -6,7 +6,7 @@ local function get_modified_buffers()
         if vim.bo[bufnr].modified then
             local filename = vim.api.nvim_buf_get_name(bufnr)
             table.insert(list,
-                vim.fn.fnamemodify(filename, ':t')
+                vim.fn.fnamemodify(filename, ':.')
             )
         end
     end
