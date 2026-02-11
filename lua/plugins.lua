@@ -386,7 +386,7 @@ require("lazy").setup({
         lazy = false,
         keys = {
             {
-                "<leader>f",
+                "<leader>fa",
                 function()
                     Snacks.picker()
                 end,
