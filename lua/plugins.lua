@@ -331,7 +331,7 @@ require("lazy").setup({
                             and {
                                 { dirname,     hl = "file" }, -- Last file / directory, highlighted
                                 { " " },
-                                { path .. "/", hl = "dir" }, -- Path (shortened)
+                                { path .. "/", hl = "dir" },  -- Path (shortened)
                                 -- { file, hl = "dir" }, -- hl = "dir" to not highlight twice
                             }
                             or { { fname, hl = "file" } }
@@ -472,7 +472,7 @@ require("lazy").setup({
                 mode = "diagnostics", -- inherit from diagnostics mode
                 filter = {
                     any = {
-                        buf = 0,                        -- current buffer
+                        buf = 0,                                      -- current buffer
                         {
                             severity = vim.diagnostic.severity.ERROR, -- errors only
                             -- limit to files in the current project
@@ -486,7 +486,9 @@ require("lazy").setup({
         },
     },
     {
-        "folke/todo-comments.nvim",
+        -- TODO switch back once the PR is merged https://github.com/folke/todo-comments.nvim/pull/381
+        -- "folke/todo-comments.nvim",
+        "belltoy/todo-comments.nvim",
         lazy = false,
         dependencies = { "nvim-lua/plenary.nvim" },
         opts = {
@@ -508,7 +510,7 @@ require("lazy").setup({
     {
         "rachartier/tiny-inline-diagnostic.nvim",
         event = "VeryLazy", -- Or `LspAttach`
-        priority = 1000, -- needs to be loaded in first
+        priority = 1000,    -- needs to be loaded in first
         config = function()
             require("tiny-inline-diagnostic").setup({
                 preset = "minimal",
@@ -550,4 +552,13 @@ require("lazy").setup({
     {
         "vala-lang/vala.vim",
     },
+    {
+        "nvim-pack/nvim-spectre",
+        keys = {
+            { '<F4>', "<cmd>Spectre<cr>", mode = { 'n' } },
+        },
+        config = function()
+            require('spectre').setup({ is_block_ui_break = true })
+        end,
+    }
 })
