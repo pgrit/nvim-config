@@ -560,5 +560,14 @@ require("lazy").setup({
         config = function()
             require('spectre').setup({ is_block_ui_break = true })
         end,
+    },
+    {
+        "HakonHarnes/img-clip.nvim",
+        event = "VeryLazy",
+        opts = {
+        },
+        keys = {
+            { "<leader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+        },
     }
 })
