@@ -1,7 +1,7 @@
 -- define common options
 local opts = {
-    noremap = true,  -- non-recursive
-    silent = true,   -- do not show message
+    noremap = true, -- non-recursive
+    silent = true,  -- do not show message
 }
 
 -----------------------------
@@ -18,6 +18,9 @@ map("i", "<Home>", "<Esc>^i")
 
 -- Shortcut to clear search results
 vim.keymap.set("n", "<Leader>c", ':let @/ = ""<CR>', opts)
+
+-- Go-to-definition interferes with navigating to links (use 'gd' instead)
+vim.keymap.set('n', '<C-LeftMouse>', '<Nop>', opts)
 
 -----------------
 -- Normal mode --
