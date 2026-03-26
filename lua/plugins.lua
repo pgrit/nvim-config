@@ -310,7 +310,7 @@ require("lazy").setup({
                     -- full path (with long intermediate dirs shortened) after it
                     file = function(item, ctx)
                         local fname = vim.fn.fnamemodify(item.file, ":~")
-                        local path, dirname = fname:match("^(.*)/(.+)$")
+                        local path, dirname = fname:match("^(.*)[/\\](.+)$")
 
                         local extra = #dirname + 1 -- width of the preceeding directory name
 
