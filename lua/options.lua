@@ -9,10 +9,21 @@ vim.opt.softtabstop = 4  -- number of spaces in tab when editing
 vim.opt.shiftwidth = 4   -- insert 4 spaces on a tab
 vim.opt.expandtab = true -- tabs are spaces, mainly because of python
 
-local autocmd = vim.api.nvim_create_autocmd
-autocmd("Filetype", {
-    pattern = { "typst", "html", "just", "markdown" },
-    command = "set shiftwidth=2 tabstop=2 softtabstop=2",
+-- Shrink tab size for some file types
+-- Need to reset if another type is loaded. This probably also ignores any
+-- .editorconfig settings for this filetype
+vim.api.nvim_create_autocmd("FileType", {
+    callback = function(ev)
+        local widths = { ["typst"] = 2, ["html"] = 2, ["just"] = 2, ["markdown"] = 2 }
+        local w = widths[ev.match]
+        if w == nil then
+            w = 4
+        end
+
+        vim.opt.shiftwidth = w
+        vim.opt.tabstop = w
+        vim.opt.softtabstop = w
+    end,
 })
 
 -- UI config
