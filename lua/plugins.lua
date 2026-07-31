@@ -127,7 +127,7 @@ require("lazy").setup({
                 "ts_ls",
                 "html",
 
-                "csharp_ls",
+                "roslyn_ls",
                 "fsautocomplete",
 
                 "tinymist",
