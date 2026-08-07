@@ -125,7 +125,11 @@ vim.lsp.config("lua_ls", {
 })
 
 vim.lsp.config("roslyn", {
-    on_attach = function()
+    on_attach = function(client, bufnr)
+        -- WORKAROUND Semantic tokens cause neovim to hang when .razor buffers are open
+        if vim.bo[bufnr].filetype == "razor" then
+            client.server_capabilities.semanticTokensProvider = nil
+        end
     end,
     settings = {
         ["csharp|inlay_hints"] = {
