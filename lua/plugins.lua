@@ -127,7 +127,6 @@ require("lazy").setup({
                 "ts_ls",
                 "html",
 
-                "roslyn_ls",
                 "fsautocomplete",
 
                 "tinymist",
@@ -140,6 +139,10 @@ require("lazy").setup({
                 "rust_analyzer",
 
                 "lua_ls",
+            },
+
+            automatic_enable = {
+                exclude = { "roslyn_ls" }
             },
         },
     },
@@ -568,6 +571,13 @@ require("lazy").setup({
         },
         keys = {
             { "<leader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+        },
+    },
+    {
+        "seblyng/roslyn.nvim",
+        ---@module 'roslyn.config'
+        ---@type RoslynNvimConfig
+        opts = {
         },
     }
 })
