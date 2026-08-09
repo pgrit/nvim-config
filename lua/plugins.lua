@@ -166,35 +166,35 @@ require("lazy").setup({
                 function()
                     require("dap").continue()
                 end,
-                "Start / continue debug session"
+                desc = "Start / continue debug session"
             },
             {
                 "<F6>",
                 function()
                     require("dap").terminate()
                 end,
-                "Terminate debug session"
+                desc = "Terminate debug session"
             },
             {
                 "<F10>",
                 function()
                     require("dap").step_over()
                 end,
-                "Step over"
+                desc = "Step over"
             },
             {
                 "<F12>",
                 function()
                     require("dap").step_into()
                 end,
-                "Step into"
+                desc = "Step into"
             },
             {
                 "<F9>",
                 function()
                     require("dap").toggle_breakpoint()
                 end,
-                "Toggle breakpoint"
+                desc = "Toggle breakpoint"
             },
         }
     },
@@ -220,14 +220,14 @@ require("lazy").setup({
                 function()
                     require("dapui").open()
                 end,
-                "Open debug UI"
+                desc = "Open debug UI"
             },
             {
                 "<leader>dc",
                 function()
                     require("dapui").close()
                 end,
-                "Close debug UI"
+                desc = "Close debug UI"
             },
         }
     },
@@ -393,49 +393,49 @@ require("lazy").setup({
                 function()
                     Snacks.picker()
                 end,
-                "Show all pickers"
+                desc = "Show all pickers"
             },
             {
                 "<leader>ff",
                 function()
                     Snacks.picker("files")
                 end,
-                "Find file"
+                desc = "Find file"
             },
             {
                 "<leader>fg",
                 function()
                     Snacks.picker("grep")
                 end,
-                "Grep"
+                desc = "Grep"
             },
             {
                 "<leader>fb",
                 function()
                     Snacks.picker("buffers")
                 end,
-                "Pick open buffer"
+                desc = "Pick open buffer"
             },
             {
                 "<leader>ft",
                 function()
                     Snacks.picker("todo_comments")
                 end,
-                "Pick TODO comments"
+                desc = "Pick TODO comments"
             },
             {
                 "<leader>fs",
                 function()
                     Snacks.picker("lsp_workspace_symbols")
                 end,
-                "Pick symbols in workspace"
+                desc = "Pick symbols in workspace"
             },
             {
                 "<leader>fl",
                 function()
                     Snacks.picker("lsp_symbols")
                 end,
-                "Pick symbols in buffer"
+                desc = "Pick symbols in buffer"
             },
         }
     },
@@ -558,7 +558,7 @@ require("lazy").setup({
     {
         "nvim-pack/nvim-spectre",
         keys = {
-            { '<F4>', "<cmd>Spectre<cr>", mode = { 'n' } },
+            { '<F4>', "<cmd>Spectre<cr>", mode = { 'n' }, desc = "Open search & replace (spectre)" },
         },
         config = function()
             require('spectre').setup({ is_block_ui_break = true })
@@ -578,6 +578,21 @@ require("lazy").setup({
         ---@module 'roslyn.config'
         ---@type RoslynNvimConfig
         opts = {
+        },
+    },
+    {
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        opts = {
+        },
+        keys = {
+            {
+                "<leader>?",
+                function()
+                    require("which-key").show({ global = false })
+                end,
+                desc = "Buffer Local Keymaps (which-key)",
+            },
         },
     }
 })
