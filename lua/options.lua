@@ -50,3 +50,6 @@ vim.filetype.add({
 
 -- Use space as <leader>
 vim.g.mapleader = " "
+
+-- Borders around floating windows for diagnostics
+vim.diagnostic.config { float = { border = "rounded" } }
