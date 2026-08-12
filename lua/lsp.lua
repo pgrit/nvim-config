@@ -93,6 +93,15 @@ vim.lsp.config("ltex_plus", {
     },
 })
 
+vim.keymap.set("n", "<leader>s", function()
+    local enabled = vim.lsp.is_enabled("ltex_plus")
+    vim.lsp.enable("ltex_plus", not enabled)
+    vim.notify(
+        "LTeX+ spell/grammar check " .. (enabled and "disabled" or "enabled"),
+        vim.log.levels.INFO
+    )
+end, { desc = "Toggle ltex_plus LSP" })
+
 local hl = require("actions-preview.highlight")
 require("actions-preview").setup({
     highlight_command = {

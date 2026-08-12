@@ -142,7 +142,10 @@ require("lazy").setup({
             },
 
             automatic_enable = {
-                exclude = { "roslyn_ls" }
+                exclude = {
+                    "roslyn_ls", -- enabled by plugin, don't run twice
+                    "ltex_plus"  -- heavy on memory, run on-demand
+                }
             },
         },
     },
