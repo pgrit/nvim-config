@@ -123,7 +123,7 @@ vim.lsp.config("lua_ls", {
             },
             workspace = {
                 -- Make the server aware of Neovim runtime files and plugins
-                library = { vim.env.VIMRUNTIME },
+                library = { vim.env.VIMRUNTIME, vim.fn.stdpath("data") .. "/lazy" },
                 checkThirdParty = false,
             },
             telemetry = {
