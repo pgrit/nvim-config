@@ -32,6 +32,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
         local client = vim.lsp.get_client_by_id(args.data.client_id)
         if client and client.name == "tinymist" then
             vim.keymap.set("n", "<leader>tp", function()
+                local msg = string.format("Typst file pinned: %s", vim.api.nvim_buf_get_name(0))
+                vim.notify(msg, "info")
                 client:exec_cmd({
                     title = "pin",
                     command = "tinymist.pinMain",
@@ -39,6 +41,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
                 }, { bufnr = args.buf })
             end, { desc = "[T]inymist [P]in", noremap = true })
             vim.keymap.set("n", "<leader>tu", function()
+                local msg = string.format("Typst file unpinned: %s", vim.api.nvim_buf_get_name(0))
+                vim.notify(msg, "info")
                 client:exec_cmd({
                     title = "unpin",
                     command = "tinymist.pinMain",
