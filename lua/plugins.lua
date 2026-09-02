@@ -154,8 +154,9 @@ require("lazy").setup({
         lazy = false,
         version = "1.*",
         opts = {
+            debug = false,
             dependencies_bin = {
-                ["tinymist"] = "tinymist", -- Use tinymist installed via Mason, assuming it is in path (avoids version mismatch between LSP and preview)
+                tinymist = "tinymist", -- Use tinymist installed via Mason
             },
             -- specify local relative paths for fonts (must be consistent with LSP setting & CLI args!)
             extra_args = { "--font-path", "./common/fonts", "--font-path", "./fonts" },
@@ -586,5 +587,25 @@ require("lazy").setup({
                 desc = "Buffer Local Keymaps (which-key)",
             },
         },
-    }
+    },
+    {
+        "tpope/vim-surround",
+        keys = {
+            -- replaces substitute (which I never use) with surround
+            {
+                "s",
+                "<Plug>Ysurround",
+                mode = "n",
+                desc = "Surround with..."
+            },
+            {
+                "s",
+                "<Plug>VSurround",
+                mode = "v",
+                remap = true,
+                desc = "Surround with..."
+            }
+        }
+    },
+    { "tpope/vim-repeat" },
 })
