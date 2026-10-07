@@ -363,7 +363,7 @@ require("lazy").setup({
             statuscolumn = {},
             words = {},
             notifier = {
-                timeout = 6000,
+                timeout = 2500,
                 width = { min = 40, max = 0.8 },
                 margin = { top = 1 },
             },

@@ -26,7 +26,6 @@ vim.keymap.set('n', '<C-LeftMouse>', '<Nop>', opts)
 -- Normal mode --
 -----------------
 
--- Hint: see `:h vim.map.set()`
 -- Better window navigation
 vim.keymap.set("n", "<C-h>", "<C-w>h", opts)
 vim.keymap.set("n", "<C-j>", "<C-w>j", opts)
@@ -71,9 +70,10 @@ vim.keymap.set("n", "<C-b>", ":!dotnet build<CR>", opts)
 vim.keymap.set("n", "<Leader>tc", function()
     local fname = vim.api.nvim_buf_get_name(0)
     local mktmp = "svgdir=$(mktemp -d)"
-    local typst = "typst c " .. fname .. " --format svg ${svgdir}/img.svg"
+    local typst = "typst c " .. fname .. " --format svg ${svgdir}/img.svg --font-path ./common/fonts --font-path ./fonts"
     local copy = "wl-copy file://${svgdir}/img.svg -t text/uri-list"
     os.execute(mktmp .. " && " .. typst .. " && " .. copy)
+    vim.notify("Typst compiled and copied")
 end, opts)
 
 --------------------------
