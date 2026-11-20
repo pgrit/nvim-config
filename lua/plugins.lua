@@ -153,6 +153,13 @@ require("lazy").setup({
         "chomosuke/typst-preview.nvim",
         lazy = false,
         version = "1.*",
+        keys = {
+            {
+                "<leader>ts",
+                ":TypstPreviewSyncCursor<cr>",
+                desc = "Sync preview to current position",
+            },
+        },
         opts = {
             debug = false,
             dependencies_bin = {
