@@ -75,24 +75,3 @@ vim.keymap.set("n", "<Leader>tc", function()
     os.execute(mktmp .. " && " .. typst .. " && " .. copy)
     vim.notify("Typst compiled and copied")
 end, opts)
-
---------------------------
--- QoL plugins triggers --
---------------------------
-
-vim.keymap.set("n", "<Leader>e", function()
-    Snacks.explorer()
-end, opts)
-vim.keymap.set("n", "<Leader>g", function()
-    Snacks.lazygit()
-end, opts)
-vim.keymap.set("n", "<Leader>gg", function()
-    Snacks.lazygit()
-end, opts)
-vim.keymap.set({ "n", "v" }, "<Leader>h", function()
-    Snacks.notifier.show_history()
-end, opts)
-
-vim.keymap.set("n", "<Leader>`", function()
-    Snacks.terminal()
-end, opts)

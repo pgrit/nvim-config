@@ -448,6 +448,31 @@ require("lazy").setup({
                 end,
                 desc = "Pick symbols in buffer"
             },
+            {
+                "<leader>gg",
+                function()
+                    Snacks.lazygit()
+                end,
+                desc = "Lazygit"
+            },
+            {
+                "<leader>e",
+                function()
+                    Snacks.explorer()
+                end,
+            },
+            {
+                "<leader>h",
+                function()
+                    Snacks.notifier.show_history()
+                end
+            },
+            {
+                "<Leader>`",
+                function()
+                    Snacks.terminal()
+                end
+            },
         }
     },
     {
